@@ -44,6 +44,7 @@ public:
 	void _register();
 	void homeView();
 	void loginAdmin();
+    friend bool passwordStrength(string);
 };
 class Admin : Faculty
 {
@@ -58,6 +59,7 @@ public:
 class Database_handler
 {
 public:
+	static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 	void addStudent();
 	void getStudent();
 	void deleteStudent();

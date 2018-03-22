@@ -3,9 +3,14 @@
 //
 
 #include "attendance_management.h"
-
-void User::setName() {
-
+bool passwordStrength(string str) {
+    int countNumber,countUC;
+    countNumber=countUC=0;
+    for (char i : str) {
+        if(i >=65&& i <=90) countUC++;
+        if(i >='0'&& i <='9') countNumber++;
+    }
+    return countNumber && countUC && str.length()>=6 && str.length()<=13 ;
 }
 
 void Interface_handler::homeView() {
@@ -36,7 +41,7 @@ void Interface_handler::homeView() {
             break;
         case 5:
             user =new User();
-             user->viewDefaulters();
+            // user->viewDefaulters();
             delete user;
             break;
         default:
@@ -57,3 +62,39 @@ void Interface_handler::loginAdmin() {
 
 
 }
+
+void Interface_handler::loginFaculty() {
+    string input_password,name;
+    cout<<"You chose to login as Faculty\n.Enter your Name and Password :\nName: \n";
+    cin>>name;
+    cout<<"Password:\n";
+    cin>>input_password;
+
+
+}
+
+void Interface_handler::_register() {
+    string input_password,name,input_password_verify;
+    cout<<"You chose to Register.\nEnter your Name.\n";
+    getline(cin,name);
+    cout<<"Enter a 6 to 13 digit Password. ( It must contain a number and an Upper Case alphabet )\n";
+    cin>>input_password;
+    while(!passwordStrength(input_password))
+    {
+       cout<<"Yout password must contain a number and an Upper Case alphabet !\nReenter your password.\n";
+        cin>>input_password;
+    }
+    system("clear");
+    cout<<"Re enter your password to continue.\n";
+    cin>>input_password_verify;
+    while(input_password!=input_password_verify) {
+        system("clear");
+        cout << "Password does not match.\n Enter again.\n";
+        cin >> input_password_verify;
+    }
+
+    }
+
+
+
+
