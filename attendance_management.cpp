@@ -3,6 +3,7 @@
 //
 
 #include "attendance_management.h"
+int Interface_handler::adminPasswordCount=0;
 bool passwordStrength(string str) {
     int countNumber,countUC;
     countNumber=countUC=0;
@@ -55,12 +56,41 @@ void Interface_handler::homeView() {
 
 void Interface_handler::loginAdmin() {
 
-    string input_password;
-    cout<<"You chose to login as Admin\n.Enter Admin Password :\n";
-    cin>>input_password;
+    string input_password,verify_password;
+    system("clear");
+    if(adminPasswordCount>3)
+    {
+        cout<<"You have exceeded the maximum number of tries for login.\n";
+        cout<<"For support send an email at :\n\n***\tgambhir.2@iitj.ac.in\t***\n\nor\n\n***\tjangir.3@iitj.ac.in\t***\n\n";
+        cout<<"Enter any key to return to Home.\n";
+        while(cin.get()) this->homeView();
+    } else
+    {
+        cout<<"You chose to login as Admin.\nEnter Admin Password :\n";
+        cin>>input_password;
+        ifstream file("passwords.txt");
+        file>>verify_password;
+        if (verify_password == input_password) {
+            Admin *admin = new Admin;
+            file.close();
+            adminPasswordCount = 0;
+            //admin->adminDashboard();
 
-
-
+        } else {
+            char response;
+            cout << "Invalid Password!\n" << ( 3 - adminPasswordCount ) << "  tries remaining !\n";
+           if((3 - adminPasswordCount++))
+           {
+               cout << "Enter 'y' : to try again , 'n' to return to Home Page.\n";
+                while (cin >> response) {
+                    if (response == 'n') this->homeView();
+                    else if (response == 'y') this->loginAdmin();
+                    else cout << "Invalid response.\nEnter Again.\n";
+                }
+           }
+            else this->loginAdmin();
+        }
+    }
 }
 
 void Interface_handler::loginFaculty() {
