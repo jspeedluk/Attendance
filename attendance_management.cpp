@@ -3,30 +3,39 @@
 //
 
 #include "attendance_management.h"
-int Interface_handler::adminPasswordCount=0;
+
+int Interface_handler::adminPasswordCount = 0;
+
 bool passwordStrength(string str) {
-    int countNumber,countUC;
-    countNumber=countUC=0;
+    int countNumber, countUC;
+    countNumber = countUC = 0;
     for (char i : str) {
-        if(i >=65&& i <=90) countUC++;
-        if(i >='0'&& i <='9') countNumber++;
+        if (i >= 65 && i <= 90) countUC++;
+        if (i >= '0' && i <= '9') countNumber++;
     }
-    return countNumber && countUC && str.length()>=6 && str.length()<=13 ;
+    return countNumber && countUC && str.length() >= 6 && str.length() <= 13;
+}
+
+string Database_handler::getFaculty(const string nameOfFaculty) {
+    auto i =faculty.begin();
+    while(i++!=faculty.end()) cout<<i->first<<"   "<<i->second<<endl;
+    return faculty[nameOfFaculty];
 }
 
 void Interface_handler::homeView() {
 
-    cout<<"Enter 1 for Admin Login :\n";
-    cout<<"Enter 2 for Faculty Login :\n";
-    cout<<"Enter 3 for registration of new Faculty:\n";
-    cout<<"Enter 4 to view All Attendance :\n";
-    cout<<"Enter 5 to view All Defaulters :\n";
+    cout << "Enter 1 for Admin Login :\n";
+    cout << "Enter 2 for Faculty Login :\n";
+    cout << "Enter 3 for registration of new Faculty:\n";
+    cout << "Enter 4 to view All Attendance :\n";
+    cout << "Enter 5 to view All Defaulters :\n";
+    cout << "Enter 9 to Exit :\n";
     unsigned int input;
-    User* user;
-    cin>>input;
-    system ("clear");
-    switch(input)
-    {
+    bool exit = 0;
+    User *user;
+    cin >> input;
+    system("clear");
+    switch (input) {
         case 1:
             this->loginAdmin();
             break;
@@ -37,94 +46,180 @@ void Interface_handler::homeView() {
             this->_register();
             break;
         case 4:
-            user=new User();
+            user = new User();
             delete user;
             break;
         case 5:
-            user =new User();
+            user = new User();
             // user->viewDefaulters();
             delete user;
             break;
+        case 9:
+            cout << "Exiting.......................\n";
+            exit = true;
+            break;
         default:
-            cout<<"Invalid choice\n";
-            this->homeView();
-
-
+            cout << "Invalid choice\n";
     }
+    if (!exit)
+        this->homeView();
+
 
 }
 
 void Interface_handler::loginAdmin() {
 
-    string input_password,verify_password;
+    string input_password, verify_password;
     system("clear");
-    if(adminPasswordCount>3)
-    {
-        cout<<"You have exceeded the maximum number of tries for login.\n";
-        cout<<"For support send an email at :\n\n***\tgambhir.2@iitj.ac.in\t***\n\nor\n\n***\tjangir.3@iitj.ac.in\t***\n\n";
-        cout<<"Enter any key to return to Home.\n";
-        while(cin.get()) this->homeView();
-    } else
-    {
-        cout<<"You chose to login as Admin.\nEnter Admin Password :\n";
-        cin>>input_password;
+    if (adminPasswordCount > 3) {
+        cout << "You have exceeded the maximum number of tries for login.\n";
+        cout
+                << "For support send an email at :\n\n***\tgambhir.2@iitj.ac.in\t***\n\nor\n\n***\tjangir.3@iitj.ac.in\t***\n\n";
+        cout << "Enter any key to return to Home.\n";
+        while (cin.get()) this->homeView();
+    } else {
+        cout << "You chose to login as Admin.\nEnter Admin Password :\n";
+        cin >> input_password;
         ifstream file("passwords.txt");
-        file>>verify_password;
+        file >> verify_password;
         if (verify_password == input_password) {
-            Admin *admin = new Admin;
+            Admin *admin = new Admin(*this);
             file.close();
             adminPasswordCount = 0;
-            //admin->adminDashboard();
+            admin->adminDashboard();
+            return;
 
         } else {
             char response;
-            cout << "Invalid Password!\n" << ( 3 - adminPasswordCount ) << "  tries remaining !\n";
-           if((3 - adminPasswordCount++))
-           {
-               cout << "Enter 'y' : to try again , 'n' to return to Home Page.\n";
+            cout << "Invalid Password!\n" << (3 - adminPasswordCount) << "  tries remaining !\n";
+            if ((3 - adminPasswordCount++)) {
+                cout << "Enter 'y' : to try again , 'n' to return to Home Page.\n";
                 while (cin >> response) {
                     if (response == 'n') this->homeView();
-                    else if (response == 'y') this->loginAdmin();
-                    else cout << "Invalid response.\nEnter Again.\n";
+                    else if (response == 'y') {
+                        this->loginAdmin();
+                        return;
+                    } else cout << "Invalid response.\nEnter Again.\n";
                 }
-           }
-            else this->loginAdmin();
+            } else this->loginAdmin();
         }
     }
 }
 
 void Interface_handler::loginFaculty() {
-    string input_password,name;
-    cout<<"You chose to login as Faculty\n.Enter your Name and Password :\nName: \n";
-    cin>>name;
-    cout<<"Password:\n";
-    cin>>input_password;
-
+    string input_password, name;
+    cout << "You chose to login as Faculty.\nEnter your Name and Password :\nName : \n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, name);
+    cout << "Password:\n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, input_password);
+    cout<<name<<"    "<<input_password<<"    "<<db->getFaculty(name)<<endl;
+    if (db->getFaculty(name) == input_password) {
+        Faculty *faculty = new Faculty;
+//        faculty->facultyDashboard();
+        cout << "Faculty actually registered ! \n\n Its Working.\n";
+    } else {
+        if (db->getFaculty(name).length() < 6) cout << "Invalid Name. (Check for Upper/Lower Case) \n";
+        else {
+            cout << "Invalid Password.\n";
+            this->homeView();
+        }
+    }
 
 }
 
-void Interface_handler::_register() {
-    string input_password,name,input_password_verify;
-    cout<<"You chose to Register.\nEnter your Name.\n";
-    getline(cin,name);
-    cout<<"Enter a 6 to 13 digit Password. ( It must contain a number and an Upper Case alphabet )\n";
-    cin>>input_password;
-    while(!passwordStrength(input_password))
-    {
-       cout<<"Yout password must contain a number and an Upper Case alphabet !\nReenter your password.\n";
-        cin>>input_password;
+void Interface_handler::_register() { //should require admin password
+    string input_password, name, input_password_verify;
+    cout << "You chose to Register.\nEnter your Name.\n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, name);
+    cout << "Enter a 6 to 13 digit Password. ( It must contain a number and an Upper Case alphabet )\n";
+    cin >> input_password;
+    while (!passwordStrength(input_password)) {
+        cout << "Yout password must contain a number and an Upper Case alphabet !\nReenter your password.\n";
+        cin >> input_password;
     }
     system("clear");
-    cout<<"Re enter your password to continue.\n";
-    cin>>input_password_verify;
-    while(input_password!=input_password_verify) {
+    cout << "Re enter your password to continue.\n";
+    cin >> input_password_verify;
+    while (input_password != input_password_verify) {
         system("clear");
         cout << "Password does not match.\n Enter again.\n";
         cin >> input_password_verify;
     }
+    cout << name << " has been successfully registered as the Faculty for the course !\n";
+    return;
+}
 
+Interface_handler::Interface_handler() {db=new Database_handler;}
+
+
+void Admin::adminDashboard() {
+    system("clear");
+    cout << "\nWelcome Dr. Chiranjoy Chattopadhyay.\n";
+    cout << "Enter 1 to Add a Faculty for the course :\n";
+    cout << "Enter 2 to modify a Faculty details :\n";
+    cout << "Enter 3 to remove a Faculty designated for the course :\n";
+    cout << "Enter 4 to view All Attendance :\n";
+    cout << "Enter 5 to register a student in the course :\n";
+    cout << "Enter 6 to modify a Students details :\n";
+    cout << "Enter 7 to remove a registered student from the course :\n";
+    cout << "Enter 8 to modify Attendance :\n";
+    cout << "Enter 9 to add Attendance into the database :\n";
+    unsigned int input;
+    cin >> input;
+    system("clear");
+    switch (input) {
+        case 1:
+            this->addFaculty();
+            break;
+        case 2:
+//            this->setFaculty();
+            break;
+        case 3:
+//            this->deleteFaculty();
+            break;
+        case 4:
+//            this->viewAttendance();
+            break;
+        case 5:
+//            this->addStudent();
+            break;
+        case 6:
+//            this->modifyStudent();
+            break;
+        case 7:
+//            this->deleteStudent();
+            break;
+        case 8:
+//            this->modifyStudent();
+            break;
+        case 9:
+            //    this->addAttendance();
+            break;
+        default:
+            cout << "Invalid choice\n";
+            this->adminDashboard();
     }
+}
 
+void Admin::addFaculty() {
+    handler._register();
 
+}
 
+Admin::Admin(Interface_handler mHandler) {
+    handler = mHandler;
 
+}
+
+Database_handler::Database_handler() {
+    fstream file("faculty_details.txt", ios::in);
+    string facultyName, password;
+    while (!file.eof()) {
+        getline(file, facultyName);
+        getline(file, password);
+        faculty[facultyName] = password;
+    }
+}
