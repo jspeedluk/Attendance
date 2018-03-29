@@ -1,8 +1,7 @@
-#include "attendance_management.h"
+#include "Interface_handler.h"
 
 int main() {
     system ("clear");
     Interface_handler program;
     program.homeView();
-    return 0;
 }
