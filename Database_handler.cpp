@@ -25,6 +25,7 @@ string Database_handler::getFaculty(const string nameOfFaculty) {
 void Database_handler::addFaculty(Faculty facultyObj) {
     ofstream file("faculty_details.txt",ios::out);
 //    file.write((char*) &facultyObj,sizeof(facultyObj)); // try later
+    facultyMap.erase(facultyObj.getName());
     auto  it=facultyMap.begin();
     while(++it!=facultyMap.end()) file<<it->first<<'\n'<<it->second<<'\n';
     facultyMap[facultyObj.getName().substr(0,'\n')]=facultyMap[facultyObj.getPassword().substr(0,'\n')];

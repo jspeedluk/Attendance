@@ -70,7 +70,7 @@ void Interface_handler::loginFaculty() {
     cout << "Password:\n";
     getline(cin, input_password);
     if (db->getFaculty(name) == input_password) {
-        Faculty *faculty = new Faculty(name,input_password);
+        Faculty *faculty = new Faculty(name,input_password, *db);
         faculty->facultyDashboard();
     } else {
         if (db->getFaculty(name).length() < 6) cout << "Invalid Name. (Check for Upper/Lower Case) \n";
@@ -108,7 +108,7 @@ void Interface_handler::_register() { //should require admin password
         cout << "Password does not match.\n Enter again.\n";
         cin >> input_password_verify;
     }
-    Faculty faculty(name,input_password);
+    Faculty faculty(name,input_password,*db);
     db->addFaculty(faculty);
     cout << name << " has been successfully registered as the Faculty for the course !\n";
 }
@@ -129,7 +129,7 @@ void Interface_handler::loginAdmin() {
         ifstream file("passwords.txt");
         file >> verify_password;
         if (verify_password == input_password) {
-            Admin *admin = new Admin("Admin",input_password,*this);
+            Admin *admin = new Admin("Admin",input_password,*db,*this);
             file.close();
             adminPasswordCount = 0;
             admin->adminDashboard();

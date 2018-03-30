@@ -4,9 +4,10 @@
 #include <iostream>
 #include "Faculty.h"
 
-Faculty::Faculty(const string &facultyName, const string &password) :
+
+Faculty::Faculty(const string &facultyName, const string &password ,Database_handler &db ) :
     User(facultyName) ,
-    password(password) {}
+    password(password) ,db(&db){}
 
 const void Faculty::facultyDashboard() {
     cout<<"Welcome Dr. "<<this->name<<" to your Dashboard .\n";
@@ -100,7 +101,7 @@ bool Faculty::setPassword() {
     cout<<"Enter new Password :\n";
     cin>>pass_new;
     this->password=pass_new;
-   // db->addFaculty(*this);
+    db->addFaculty(*this);
     return false;
 }
 
