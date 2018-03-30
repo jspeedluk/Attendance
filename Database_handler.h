@@ -9,10 +9,12 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include "Faculty.h"
+
 using namespace std;
 
 class Database_handler {
-    map<string, string> faculty;
+    map<string, string> facultyMap;
 public:
     Database_handler();
     void addStudent();
@@ -21,7 +23,7 @@ public:
 
     void deleteStudent();
 
-    void addFaculty();
+    void addFaculty(Faculty);
 
     string getFaculty(string);
 

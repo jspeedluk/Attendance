@@ -16,7 +16,7 @@ public:
 
     void setName();
 
-    void getName();
+    string getName();
 
     void viewAttendance();
 

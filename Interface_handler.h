@@ -6,6 +6,7 @@
 #define ATTENDANCE_INTERFACE_HANDLER_H
 
 #include "Database_handler.h"
+
 using namespace std;
 
 class Interface_handler {

@@ -46,7 +46,7 @@ void Admin::adminDashboard() {
 //            this->deleteStudent();
             break;
         case 8:
-//            this->modifyStudent();
+//            this->modifyAttendance();
             break;
         case 9:
             //    this->addAttendance();

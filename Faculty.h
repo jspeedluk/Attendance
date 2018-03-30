@@ -10,6 +10,7 @@
 
 class Faculty : public User {
     string password;
+    //Database_handler *db;
 public:
     void addStudent();
 
@@ -21,11 +22,14 @@ public:
 
     void addAttendance();
 
-    void setPassword();
+    bool setPassword();
+
+    string getPassword();
+
+    void modifyAttendance();
 
     const void facultyDashboard();
-
-    Faculty(const string &basic_string, const string &);
+    Faculty(const string &basic_string, const string & );
 };
 
 

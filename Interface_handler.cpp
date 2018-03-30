@@ -4,11 +4,7 @@
 
 #include "Interface_handler.h"
 #include "Admin.h"
-#include <fstream>
-#include <iostream>
-
-Interface_handler::Interface_handler() {db=new Database_handler;}
-
+Interface_handler::Interface_handler() {db=new Database_handler; }
 int Interface_handler::adminPasswordCount = 0;
 
 bool passwordStrength(string str) {
@@ -90,9 +86,9 @@ void Interface_handler::_register() { //should require admin password
     string input_password, name, input_password_verify;
     cout << "You chose to Register.\nEnter your Name.\n";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    getline(cin, name);
+    getline(cin, name );
     cout << "Enter a 6 to 13 digit Password. ( It must contain a number and an Upper Case alphabet )\n";
-    cin >> input_password;
+    getline(cin,input_password);
     while (!passwordStrength(input_password)) {
         cout << "Yout password must contain a number and an Upper Case alphabet !\nReenter your password.\n";
         cin >> input_password;
@@ -100,13 +96,21 @@ void Interface_handler::_register() { //should require admin password
     system("clear");
     cout << "Re enter your password to continue.\n";
     cin >> input_password_verify;
+    int passwordTries=0;
     while (input_password != input_password_verify) {
         system("clear");
+        if(passwordTries==3)
+        {
+            cout<<"Too many Attempts.\nRedirecting to Home...\n\n";
+            this->homeView();
+        }
+        passwordTries++;
         cout << "Password does not match.\n Enter again.\n";
         cin >> input_password_verify;
     }
+    Faculty faculty(name,input_password);
+    db->addFaculty(faculty);
     cout << name << " has been successfully registered as the Faculty for the course !\n";
-    return;
 }
 
 void Interface_handler::loginAdmin() {
