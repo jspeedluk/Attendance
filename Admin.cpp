@@ -3,8 +3,8 @@
 //
 
 #include "Admin.h"
-Admin::Admin(const string &basic_string, const string &input_password, const Interface_handler &handler) :
-        Faculty(basic_string,input_password), handler(handler){}
+Admin::Admin(const string &basic_string, const string &input_password,Database_handler &db, const Interface_handler &handler) :
+        Faculty(basic_string,input_password,db), handler(handler){}
 
 
 

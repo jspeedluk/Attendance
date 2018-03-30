@@ -6,11 +6,12 @@
 #define ATTENDANCE_FACULTY_H
 
 #include "User.h"
+#include "Database_handler.h"
 
-
+class Database_handler;
 class Faculty : public User {
     string password;
-    //Database_handler *db;
+    Database_handler *db;
 public:
     void addStudent();
 
@@ -29,7 +30,7 @@ public:
     void modifyAttendance();
 
     const void facultyDashboard();
-    Faculty(const string &basic_string, const string & );
+    Faculty(const string &basic_string, const string & ,Database_handler &);
 };
 
 

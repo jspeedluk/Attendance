@@ -12,7 +12,7 @@
 #include "Faculty.h"
 
 using namespace std;
-
+class Faculty;
 class Database_handler {
     map<string, string> facultyMap;
 public:

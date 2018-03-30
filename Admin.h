@@ -13,7 +13,7 @@ class Admin : public Faculty {
 private:
     Interface_handler handler;
 public:
-    Admin(const string &basic_string, const string &, const Interface_handler &handler);
+    Admin(const string &basic_string, const string &,Database_handler &db, const Interface_handler &handler);
 
     void addFaculty();
 
