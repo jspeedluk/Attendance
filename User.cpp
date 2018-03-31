@@ -4,21 +4,22 @@
 
 #include "User.h"
 
+//Constructor
 User::User(const string &name) : name(name) {}
 
 string User::getName() {
     return this->name;
+}
 
+void User::setName(string nameToBeFilled) {
+    name = nameToBeFilled;
 }
 
 void User::viewAttendance() {
 
 }
 
-void User::setName() {
-
-}
-
 void User::viewDefaulters() {
 
 }
+

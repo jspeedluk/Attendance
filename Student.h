@@ -8,8 +8,15 @@
 #include "User.h"
 
 class Student : public User {
+protected:
     string rollNumber;
-};
+public:
 
+    /*returns rollNumber*/
+    string getRollNumber();
+
+    /*sets rollNumber as rollNumberToBeSet*/
+    void setRollNumber(string rollNumberToBeSet);
+};
 
 #endif //ATTENDANCE_STUDENT_H

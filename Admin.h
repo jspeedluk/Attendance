@@ -15,12 +15,14 @@ private:
 public:
     Admin(const string &basic_string, const string &, const Interface_handler &handler);
 
+    /*calls function _register*/
     void addFaculty();
 
     void setFaculty();
 
     void getFaculty();
-
+    /*Add faculty, modify faculty, remove faculty, register student, modify student, remove student,
+     *add attendance, view attendance*/
     void adminDashboard();
 
     void deleteFaculty();

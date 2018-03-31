@@ -82,7 +82,8 @@ void Interface_handler::loginFaculty() {
 
 }
 
-void Interface_handler::_register() { //should require admin password
+void Interface_handler::_register() {
+    //should require admin password
     string input_password, name, input_password_verify;
     cout << "You chose to Register.\nEnter your Name.\n";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');

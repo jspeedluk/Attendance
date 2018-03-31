@@ -21,14 +21,15 @@ public:
     void modifyStudent();
 
     void addAttendance();
-
+    /*verify existing password, input new password, set new password*/
     bool setPassword();
-
+    /*returns Faculty:password*/
     string getPassword();
 
     void modifyAttendance();
-
+    /*register student, modify student, remove student, add Attendance, modify attendance view attendance/defaulters*/
     const void facultyDashboard();
+
     Faculty(const string &basic_string, const string & );
 };
 

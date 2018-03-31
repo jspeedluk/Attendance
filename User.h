@@ -12,10 +12,14 @@ protected:
     string name;
 public:
     User(const string &name);
+
     User() {name="Default";} ;
 
-    void setName();
+    /*argument: string name to be filled
+     *sets the string as name*/
+    void setName(string);
 
+    /*returns string User:name*/
     string getName();
 
     void viewAttendance();

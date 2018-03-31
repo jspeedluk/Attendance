@@ -3,3 +3,11 @@
 //
 
 #include "Student.h"
+
+string getRollNumber(){
+    return rollNumber;
+}
+
+void setRollNumber(string rollNumberToBeSet){
+    rollNumber = rollNumberToBeSet;
+}
