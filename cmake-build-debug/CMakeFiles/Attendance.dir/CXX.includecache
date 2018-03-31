@@ -31,6 +31,8 @@ fstream
 -
 iostream
 -
+cstdio
+-
 Faculty.h
 /Users/gambhir/Desktop/Attendance/Faculty.h
 
@@ -41,8 +43,8 @@ Faculty.h
 /Users/gambhir/Desktop/Attendance/Faculty.h
 
 /Users/gambhir/Desktop/Attendance/Faculty.h
-User.h
-/Users/gambhir/Desktop/Attendance/User.h
+Student.h
+/Users/gambhir/Desktop/Attendance/Student.h
 Database_handler.h
 /Users/gambhir/Desktop/Attendance/Database_handler.h
 
@@ -65,8 +67,16 @@ User.h
 /Users/gambhir/Desktop/Attendance/User.h
 
 /Users/gambhir/Desktop/Attendance/User.cpp
+iostream
+-
 User.h
 /Users/gambhir/Desktop/Attendance/User.h
+map
+-
+vector
+-
+fstream
+-
 
 /Users/gambhir/Desktop/Attendance/User.h
 string

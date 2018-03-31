@@ -23,7 +23,6 @@ public:
 
     void loginAdmin();
 
-    friend bool passwordStrength(string);
 };
 
 

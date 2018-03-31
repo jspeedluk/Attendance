@@ -5,12 +5,14 @@
 #ifndef ATTENDANCE_FACULTY_H
 #define ATTENDANCE_FACULTY_H
 
-#include "User.h"
+#include "Student.h"
 #include "Database_handler.h"
+
 
 class Database_handler;
 class Faculty : public User {
     string password;
+protected:
     Database_handler *db;
 public:
     void addStudent();

@@ -9,6 +9,9 @@
 
 class Student : public User {
     string rollNumber;
+public:
+    Student(const string name, const string rollNum);
+    string getRollNum();
 };
 
 

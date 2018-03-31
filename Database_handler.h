@@ -9,27 +9,31 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <cstdio>
+#define  PATH_STUDENT "/Users/gambhir/Desktop/Attendance/cmake-build-debug/students/"
+#define PRINT_WEAK_PASSWORD cout << "Yout password must be 6 to 13 digit , contain a number and an Upper Case alphabet !\nReenter your password.\n";
 #include "Faculty.h"
 
 using namespace std;
+
 class Faculty;
 class Database_handler {
     map<string, string> facultyMap;
 public:
     Database_handler();
-    void addStudent();
+    void addStudent(Student);
 
-    void getStudent();
+    string getStudent(string);
 
-    void deleteStudent();
+    void deleteStudent(const string); //not working
 
     void addFaculty(Faculty);
 
     string getFaculty(string);
 
-    void deleteFaculty();
+    void deleteFaculty(const string);
+    bool passwordStrength(string);
 
-    friend bool passwordStrength(string);
 };
 
 

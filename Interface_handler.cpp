@@ -7,15 +7,7 @@
 Interface_handler::Interface_handler() {db=new Database_handler; }
 int Interface_handler::adminPasswordCount = 0;
 
-bool passwordStrength(string str) {
-    int countNumber, countUC;
-    countNumber = countUC = 0;
-    for (char i : str) {
-        if (i >= 65 && i <= 90) countUC++;
-        if (i >= '0' && i <= '9') countNumber++;
-    }
-    return countNumber && countUC && str.length() >= 6 && str.length() <= 13;
-}
+
 
 void Interface_handler::homeView() {
 
@@ -25,7 +17,7 @@ void Interface_handler::homeView() {
     cout << "Enter 4 to view All Attendance :\n";
     cout << "Enter 5 to view All Defaulters :\n";
     cout << "Enter 9 to Exit :\n";
-    unsigned int input;
+    unsigned int input=0;
     bool exit = 0;
     User *user;
     cin >> input;
@@ -42,6 +34,7 @@ void Interface_handler::homeView() {
             break;
         case 4:
             user = new User();
+            user->viewAttendance();
             delete user;
             break;
         case 5:
@@ -89,8 +82,8 @@ void Interface_handler::_register() { //should require admin password
     getline(cin, name );
     cout << "Enter a 6 to 13 digit Password. ( It must contain a number and an Upper Case alphabet )\n";
     getline(cin,input_password);
-    while (!passwordStrength(input_password)) {
-        cout << "Yout password must contain a number and an Upper Case alphabet !\nReenter your password.\n";
+    while (!db->passwordStrength(input_password)) {
+        PRINT_WEAK_PASSWORD
         cin >> input_password;
     }
     system("clear");

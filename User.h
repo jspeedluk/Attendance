@@ -7,6 +7,7 @@
 
 #include <string>
 using namespace std;
+class Database_handler;
 class User {
 protected:
     string name;

@@ -7,16 +7,19 @@ CMakeFiles/Attendance.dir/Admin.cpp.o
  /Users/gambhir/Desktop/Attendance/Database_handler.h
  /Users/gambhir/Desktop/Attendance/Faculty.h
  /Users/gambhir/Desktop/Attendance/Interface_handler.h
+ /Users/gambhir/Desktop/Attendance/Student.h
  /Users/gambhir/Desktop/Attendance/User.h
 CMakeFiles/Attendance.dir/Database_handler.cpp.o
  /Users/gambhir/Desktop/Attendance/Database_handler.cpp
  /Users/gambhir/Desktop/Attendance/Database_handler.h
  /Users/gambhir/Desktop/Attendance/Faculty.h
+ /Users/gambhir/Desktop/Attendance/Student.h
  /Users/gambhir/Desktop/Attendance/User.h
 CMakeFiles/Attendance.dir/Faculty.cpp.o
  /Users/gambhir/Desktop/Attendance/Database_handler.h
  /Users/gambhir/Desktop/Attendance/Faculty.cpp
  /Users/gambhir/Desktop/Attendance/Faculty.h
+ /Users/gambhir/Desktop/Attendance/Student.h
  /Users/gambhir/Desktop/Attendance/User.h
 CMakeFiles/Attendance.dir/Interface_handler.cpp.o
  /Users/gambhir/Desktop/Attendance/Admin.h
@@ -24,6 +27,7 @@ CMakeFiles/Attendance.dir/Interface_handler.cpp.o
  /Users/gambhir/Desktop/Attendance/Faculty.h
  /Users/gambhir/Desktop/Attendance/Interface_handler.cpp
  /Users/gambhir/Desktop/Attendance/Interface_handler.h
+ /Users/gambhir/Desktop/Attendance/Student.h
  /Users/gambhir/Desktop/Attendance/User.h
 CMakeFiles/Attendance.dir/Student.cpp.o
  /Users/gambhir/Desktop/Attendance/Student.cpp
@@ -36,5 +40,6 @@ CMakeFiles/Attendance.dir/main.cpp.o
  /Users/gambhir/Desktop/Attendance/Database_handler.h
  /Users/gambhir/Desktop/Attendance/Faculty.h
  /Users/gambhir/Desktop/Attendance/Interface_handler.h
+ /Users/gambhir/Desktop/Attendance/Student.h
  /Users/gambhir/Desktop/Attendance/User.h
  /Users/gambhir/Desktop/Attendance/main.cpp

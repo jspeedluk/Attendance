@@ -69,11 +69,58 @@ string Faculty::getPassword() {
 }
 
 void Faculty::addStudent() {
+    system("clear");
+    cout<<"You choose to Register a new Student :\n";
+    string nameStudent,rollnumber;
+    cout<<"Enter Students Roll number :\n";
+    cin>>rollnumber;
+    cin.ignore(numeric_limits<streamsize>::max(),'\n');
+    if(db->getStudent(rollnumber)=="not present")
+    {
+        cout<<"Enter Student's Name :\n";
+        getline(cin,nameStudent);
+        Student student(nameStudent,rollnumber);
+        db->addStudent(student);
+        cout<<nameStudent<<" successfully Registered.\n";
+
+    } else
+    {
+        cout<<"Student already Registered as :\n";
+        cout<<db->getStudent(rollnumber);
+    }
 
 }
 
 void Faculty::deleteStudent() {
+    system("clear");
+    cout<<"You choose to remove a registered student from the course :\n";
+    cout<<"Enter Student roll number :\n";
+    string rollNumber,name_temp;
+    cin>>rollNumber;
+    cin.ignore(numeric_limits<streamsize>::max(),'\n');
+    name_temp=db->getStudent(rollNumber);
+    if(name_temp!="not present")
+    {
+        char input=' ';
+        cout<<"Are you sure you want to De-Register :\n"<<name_temp<<"\nfrom the coarse ? Enter 'y' or 'n' :\n";
+        while(input!='y'&&input!='n') {
+            cin>>input;
+            if (input == 'n') {
+                cout<<"You choose to Cancel.\nRedirecting to your Dashboard :\n";
+                return;
+            } else if (input == 'y') {
+                db->deleteStudent(PATH_STUDENT + rollNumber + ".txt");
+                cout << name_temp << "\nis now de-registered from the coarse.\n";
+            } else
+                cout << "Invalid Response !\nEnter Again.\n";
+        }
 
+
+    } else
+    {
+        cout<<"Student with Roll Number :\n"<<rollNumber<<"\nis Not Registered in this course. Try Again.\n";
+        return;
+    }
 }
 
 void Faculty::setStudent() {

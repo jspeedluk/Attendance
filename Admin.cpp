@@ -3,9 +3,10 @@
 //
 
 #include "Admin.h"
-Admin::Admin(const string &basic_string, const string &input_password,Database_handler &db, const Interface_handler &handler) :
-        Faculty(basic_string,input_password,db), handler(handler){}
 
+Admin::Admin(const string &basic_string, const string &input_password, Database_handler &db,
+             const Interface_handler &handler) :
+        Faculty(basic_string, input_password, db), handler(handler) {}
 
 
 void Admin::adminDashboard() {
@@ -28,10 +29,10 @@ void Admin::adminDashboard() {
             this->addFaculty();
             break;
         case 2:
-//            this->setFaculty();
+            this->setFaculty();
             break;
         case 3:
-//            this->deleteFaculty();
+            this->deleteFaculty();
             break;
         case 4:
 //            this->viewAttendance();
@@ -59,6 +60,68 @@ void Admin::adminDashboard() {
 
 void Admin::addFaculty() {
     handler._register();
+
+}
+
+void Admin::deleteFaculty() {
+    string linkedPassword, name;
+    cout << "You chose to remove a Faculty for the coarse.\nEnter Faculty Name.\n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, name);
+    linkedPassword = db->getFaculty(name);
+    if (!db->passwordStrength(linkedPassword)) {
+        cout << "No such Faculty Assigned for the coarse.\n Redirecting to Dashboard... \n";
+        return;
+    } else
+        db->deleteFaculty(name);
+    cout << name << " has been successfully Removed from the course !\n\n";
+
+}
+
+void Admin::setFaculty() {  //need bug fix
+    string linkedPassword, name;
+    cout << "You chose to modify a Faculty for the coarse.\nEnter Faculty Name.\n";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, name);
+    linkedPassword = db->getFaculty(name);
+    if (!db->passwordStrength(linkedPassword)) {
+        cout << "No such Faculty Assigned for the coarse.\n Redirecting to Dashboard... \n";
+        return;
+    }
+        cout << "Enter 1 : to change Name for Dr. " << name << endl;
+    cout << "Enter 2 : to change password for Dr. " << name << endl;
+    int inp = 0;
+    while (inp != 1 && inp != 2) {
+
+        cin >> inp;
+        if (inp == 1) {
+            string newName;
+            cout << "Enter new name for Dr. " << name << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            getline(cin, newName);
+            db->deleteFaculty(name);
+            Faculty faculty(newName, linkedPassword, *db);
+            db->addFaculty(faculty);
+            cout<<"New name has been updated .\n";
+        } else if (inp == 2) {
+            string newPass = "";
+            cout << "Enter new Password for Dr. " << name << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            getline(cin,newPass);
+            while (!db->passwordStrength(newPass))
+            {
+                PRINT_WEAK_PASSWORD
+                getline(cin,newPass);
+
+            }
+            db->deleteFaculty(name);
+            Faculty faculty(name, newPass, *db);
+            db->addFaculty(faculty);
+            cout<<"New password has been updated :\n";
+        }
+        else cout<<"Invalid Input.\nEnter again :\n";
+    }
+
 
 }
 
