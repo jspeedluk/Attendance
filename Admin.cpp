@@ -25,7 +25,7 @@ void Admin::adminDashboard() {
     char input;
     string isBadInput;
     getline(cin,isBadInput);
-    if(isBadInput.length()>1) input ='0';  //goes to defaults case for bad input
+    if(isBadInput.length()>1) input ='d';  //goes to defaults case for bad input
     else input=isBadInput.at(0);
     system("clear");
     switch (input) {

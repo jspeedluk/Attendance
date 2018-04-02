@@ -68,7 +68,7 @@ void User::viewDefaulters() {
         double percentAttendance = ( presentCountIterator->second / ( numberOfLectures + 0.0 ) )*100;
         if( percentAttendance < 85 )
         {
-            cout<< presentCountIterator->first << "\t" << percentAttendance <<endl;
+            cout<< presentCountIterator->first << "    " << percentAttendance <<endl;
         }
         presentCountIterator++;
     }
@@ -91,7 +91,7 @@ void User::viewAttendance() {
             if( dateFile.eof() )break;
             dateFile>>tempAttendanceStatus;
             //print Roll number of Student if Absent i.e. AttendanceStatus is false
-            if( tempAttendanceStatus == false )cout<<tempStudentRollNumber<< "\t";
+            if( tempAttendanceStatus == false )cout<<tempStudentRollNumber<< "    ";
         }
         dateFile.close();
         cout<<"\n\n";

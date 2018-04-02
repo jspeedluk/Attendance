@@ -194,11 +194,37 @@ void Faculty::addAttendance()
     }
     ostringstream s1;
     s1<<dd<<"-"<<mm<<"-"<<yyyy;
+    string input="c";
     string dateString = s1.str();   //to store date of lecture as string, used to create file
     vector<string> todayAbsents; //to store the roll number of students who ere absent today
     int todayAbsentsCount; //number of absents to determine for loop count
     string tempRollNumber , fileAddress; //to store roll number taken input from user
-    cout<<"Enter the number of Students absent on the date: ";
+    //if file with same date already exist then add (1) at the end of file name to create new
+    ifstream isExist("./date/"+dateString + ".txt");
+    if(!isExist)
+    {
+        fileAddress = "./date/"+dateString + ".txt";
+        lectureDates.push_back(dateString);
+        isExist.close();
+    }
+    else
+    {
+        fileAddress = "./date/"+dateString + "(1).txt";
+        if( find( lectureDates.begin() , lectureDates.end() , dateString+"(1)" ) == lectureDates.end() )
+            lectureDates.push_back(dateString+"(1)");
+        else
+            cout<<"Records for 2 Lectures for  "<<dateString<<" have already been updated.\n2nd Lecture data will be overwritten !\n";
+        cout<<"Enter 'q' to abort and return dashboard , 'c' to continue : ";
+        getline(cin,input);
+        while(input!="q"&&input!="c"&&input!="Q"&&input!="C") {
+            cout<<"Invalid Input.\nEnter Again: ";
+            getline(cin,input);
+        }
+        isExist.close();
+    }
+    if(input=="c"||input=="C")
+    {
+        cout<<"Enter the number of Students absent on the date: ";
     todayAbsentsCount=takeint();
     cout<<"Enter the roll Number of Students who were Absent today.\n";
     for (int i = 0; i < todayAbsentsCount; ++i)
@@ -207,23 +233,11 @@ void Faculty::addAttendance()
         getline(cin,tempRollNumber);
         if(presentCountList.find(tempRollNumber)==presentCountList.end())
         {
-            cout<<"Invalid Roll number. Enter Again:  ";
+            cout<<"Invalid Roll number.\nEnter Again:  ";
             i--;
         } else
         todayAbsents.push_back(tempRollNumber);
     }
-    //if file with same date already exist then add (1) at the end of file name to create new
-    ifstream isExist("./date/"+dateString + ".txt");
-    if(isExist){
-        fileAddress = "./date/"+dateString + "(1).txt";
-        lectureDates.push_back(dateString+"(1)");
-    }
-    else{
-        fileAddress = "./date/"+dateString + ".txt";
-        lectureDates.push_back(dateString);
-    }
-    isExist.close();
-
     //stores attendance in map presentCountList, vector todayAbsents
     //writes to file rollNumber true(present)/false(absent), rollNumber presentCount
     map<string,int>::iterator strollnum = presentCountList.begin();
@@ -252,6 +266,10 @@ void Faculty::addAttendance()
     stoday.close();
     storeLectureDates();
     storePresentCountList();
+} else
+    {
+        cout<<"Override Attendance Cancelled.\nRedirecting to your Dashboard...\n";
+    }
 }
 
 void Faculty::modifyAttendance() {
