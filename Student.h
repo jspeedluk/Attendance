@@ -10,7 +10,14 @@
 class Student : public User {
     string rollNumber;
 public:
+
+	//constructor taking argument as name and rollNumber
     Student(const string name, const string rollNum);
+
+    //constructor without any argument
+    Student();
+
+    //returns attribute rollNumber
     string getRollNum();
 };
 

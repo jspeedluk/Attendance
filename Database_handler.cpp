@@ -3,6 +3,7 @@
 //
 
 #include "Database_handler.h"
+#include <algorithm>
 
 bool Database_handler::passwordStrength(string str) {
     int countNumber, countUC;
@@ -15,17 +16,26 @@ bool Database_handler::passwordStrength(string str) {
 }
 Database_handler::Database_handler() {
     fstream file("faculty_details.txt", ios::in);
-    string facultyName, password;
-
+    string facultyName, password, tempStudentName , tempStudentRollNumber;
+    //forming map facultymap for faculty name and password
     while (!file.eof()) {
         getline(file, facultyName);
+        if(file.eof())break;
         getline(file, password);
         facultyMap[facultyName] = password;
     }
+    file.close();
+    //forming map studentsMap of students using file StudentsList.txt
+    fstream stfile( "StudentsList.txt" );
+    while(!stfile.eof())
+    {
+        getline( stfile, tempStudentRollNumber );
+        getline( stfile, tempStudentName );
+        studentsMap[tempStudentRollNumber]=tempStudentName;
+    }
+    stfile.close();
 //    auto  it=facultyMap.begin();
 //    while(++it!=facultyMap.end()) cout<<it->first<<endl<<it->second<<endl; //for testing
-
-
 }
 string Database_handler::getFaculty(const string nameOfFaculty) {
     return facultyMap[nameOfFaculty];
@@ -33,40 +43,12 @@ string Database_handler::getFaculty(const string nameOfFaculty) {
 
 void Database_handler::addFaculty(Faculty facultyObj) {
     ofstream file("faculty_details.txt",ios::out);
-//    file.write((char*) &facultyObj,sizeof(facultyObj)); // try later
     facultyMap.erase(facultyObj.getName());
     auto  it=facultyMap.begin();
     while(++it!=facultyMap.end()) file<<it->first<<'\n'<<it->second<<'\n';
-    facultyMap[facultyObj.getName().substr(0,'\n')]=facultyMap[facultyObj.getPassword().substr(0,'\n')];
+    facultyMap[facultyObj.getName()]=facultyMap[facultyObj.getPassword()]; //trimming '\n' from the ends.
     file<<facultyObj.getName()<<endl<<facultyObj.getPassword()<<endl;
     file.close();
-}
-
-string Database_handler::getStudent(string rollNum) {
-    FILE *file;
-    string nameStudent,filePath;
-    filePath=PATH_STUDENT+rollNum+".txt";
-    file=fopen(filePath.c_str(), "r");
-    if(!(bool)file)
-    {
-        return "not present";
-    }
-    else {
-        ifstream file_2(PATH_STUDENT + rollNum + ".txt");
-        getline(file_2,nameStudent);
-    }
-    return nameStudent;
-
-}
-
-void Database_handler::addStudent(Student student) {
-    fstream file(PATH_STUDENT+student.getRollNum()+".txt",ios_base::out);
-    file<<student.getName();
-}
-
-void Database_handler::deleteStudent(const string rollNum) {
-    string temp=PATH_STUDENT+rollNum+".txt";
-    remove(temp.c_str()); //It's not working
 }
 
 void Database_handler::deleteFaculty(const string nameOfFaculty) {
@@ -75,4 +57,52 @@ void Database_handler::deleteFaculty(const string nameOfFaculty) {
     auto it= facultyMap.begin();
     while(++it!=facultyMap.end()) file<<it->first<<endl<<it->second<<endl;
     file.close();
+}
+
+string Database_handler::getStudent(string rollNum) {
+    string nameStudent;
+    //checking presence of student in map studentsMap
+    map<string,string>::iterator mapIterator = studentsMap.find(rollNum);
+    if(mapIterator == studentsMap.end() )
+    {
+        return "not present";//means student is not present in database
+    }
+    else {
+        //student is present thus return name from map studentsMap
+        nameStudent = studentsMap[rollNum];
+    }
+    return nameStudent;
+
+}
+
+void Database_handler::addStudent(Student student) {
+    //adding student to map studentsMap 
+    studentsMap[student.getRollNum() ] = student.getName();
+    //writing whole studentsMap Map to the file StudentsList.txt
+    std::map<string,string>::iterator it = studentsMap.begin();
+    fstream writeStudents( "StudentsList.txt" , ios::out);
+    while(it!=studentsMap.end())
+    {
+        writeStudents << it->first <<'\n'<< it->second << endl;
+        it++;
+    }
+    writeStudents.close();
+    //to add student to presents count list with Zero attendance
+        User tempUser;
+    tempUser.addNewlyRegisteredStudent( student.getRollNum() );
+}
+
+void Database_handler::deleteStudent(const string rollNum) {
+    //removing from map studentsMap
+    std::map<string,string>::iterator mapIterator = studentsMap.find(rollNum);
+    studentsMap.erase(mapIterator);
+    //writing whole studentsMap Map to the file StudentsList.txt
+    std::map<string,string>::iterator it1 = studentsMap.begin();
+    fstream writeStudents1( "StudentsList.txt" , ios::out);
+    while(it1!=studentsMap.end())
+    {
+        writeStudents1 << it1->first <<'\n'<< it1->second << endl;
+        it1++;
+    }
+    writeStudents1.close();
 }

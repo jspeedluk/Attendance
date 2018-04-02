@@ -4,7 +4,7 @@
 
 #include "Interface_handler.h"
 #include "Admin.h"
-Interface_handler::Interface_handler() {db=new Database_handler; }
+Interface_handler::Interface_handler() {db=new Database_handler; exit=0; }
 int Interface_handler::adminPasswordCount = 0;
 
 
@@ -17,32 +17,35 @@ void Interface_handler::homeView() {
     cout << "Enter 4 to view All Attendance :\n";
     cout << "Enter 5 to view All Defaulters :\n";
     cout << "Enter 9 to Exit :\n";
-    unsigned int input=0;
-    bool exit = 0;
+    string isBadInput;
+    char input;
     User *user;
-    cin >> input;
+    cin >> isBadInput;
+    if(isBadInput.length()>1) input ='0';  //goes to defaults case for bad input
+    else input=isBadInput.at(0);
+    cin.ignore(INT_MAX,'\n');
     system("clear");
     switch (input) {
-        case 1:
+        case '1':
             this->loginAdmin();
             break;
-        case 2:
+        case '2':
             this->loginFaculty();
             break;
-        case 3:
+        case '3':
             this->_register();
             break;
-        case 4:
+        case '4':
             user = new User();
             user->viewAttendance();
             delete user;
             break;
-        case 5:
+        case '5':
             user = new User();
             // user->viewDefaulters();
             delete user;
             break;
-        case 9:
+        case '9':
             cout << "Exiting.......................\n";
             exit = true;
             break;
@@ -57,10 +60,9 @@ void Interface_handler::homeView() {
 
 void Interface_handler::loginFaculty() {
     string input_password, name;
-    cout << "You chose to login as Faculty.\nEnter your Name and Password :\nName : \n";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "You chose to login as Faculty.\nEnter your Name and Password\nName : ";
     getline(cin, name);
-    cout << "Password:\n";
+    cout << "Password: ";
     getline(cin, input_password);
     if (db->getFaculty(name) == input_password) {
         Faculty *faculty = new Faculty(name,input_password, *db);
@@ -70,15 +72,25 @@ void Interface_handler::loginFaculty() {
         else {
             cout << "Invalid Password.\n";
             this->homeView();
+            exit=true;
         }
     }
 
 }
 
-void Interface_handler::_register() { //should require admin password
+void Interface_handler::_register() {
+    cout<<"enter admin password :\n";
+    string adminPasswordTemp;
+    getline(cin,adminPasswordTemp);
+    if(adminPasswordTemp!="CS223"&&adminPasswordTemp!="cs223")
+    {
+        cout<<"Invalid Admin Password.\nRedirecting to home...\n";
+        this->homeView();
+        exit=true;
+    }else
+    {
     string input_password, name, input_password_verify;
     cout << "You chose to Register.\nEnter your Name.\n";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, name );
     cout << "Enter a 6 to 13 digit Password. ( It must contain a number and an Upper Case alphabet )\n";
     getline(cin,input_password);
@@ -88,7 +100,7 @@ void Interface_handler::_register() { //should require admin password
     }
     system("clear");
     cout << "Re enter your password to continue.\n";
-    cin >> input_password_verify;
+    getline(cin,input_password_verify);
     int passwordTries=0;
     while (input_password != input_password_verify) {
         system("clear");
@@ -96,14 +108,16 @@ void Interface_handler::_register() { //should require admin password
         {
             cout<<"Too many Attempts.\nRedirecting to Home...\n\n";
             this->homeView();
+            exit=true;
         }
         passwordTries++;
         cout << "Password does not match.\n Enter again.\n";
-        cin >> input_password_verify;
+        getline(cin,input_password_verify);
     }
     Faculty faculty(name,input_password,*db);
     db->addFaculty(faculty);
     cout << name << " has been successfully registered as the Faculty for the course !\n";
+}
 }
 
 void Interface_handler::loginAdmin() {
@@ -112,31 +126,31 @@ void Interface_handler::loginAdmin() {
     system("clear");
     if (adminPasswordCount > 3) {
         cout << "You have exceeded the maximum number of tries for login.\n";
-        cout
-                << "For support send an email at :\n\n***\tgambhir.2@iitj.ac.in\t***\n\nor\n\n***\tjangir.3@iitj.ac.in\t***\n\n";
+        cout<< "For support send an email at :\n\n";
+        cout<<"***\tgambhir.2@iitj.ac.in\t***\n\nor\n\n***\tjangir.3@iitj.ac.in\t***\n\n";
         cout << "Enter any key to return to Home.\n";
-        while (cin.get()) this->homeView();
+        cin.get(); this->homeView();
     } else {
         cout << "You chose to login as Admin.\nEnter Admin Password :\n";
-        cin >> input_password;
-        ifstream file("passwords.txt");
-        file >> verify_password;
-        if (verify_password == input_password) {
+        getline(cin,input_password);
+        if (input_password=="CS223"||input_password=="cs223") {
             Admin *admin = new Admin("Admin",input_password,*db,*this);
-            file.close();
             adminPasswordCount = 0;
             admin->adminDashboard();
             return;
-
         } else {
-            char response;
+            string response;
             cout << "Invalid Password!\n" << (3 - adminPasswordCount) << "  tries remaining !\n";
             if ((3 - adminPasswordCount++)) {
                 cout << "Enter 'y' : to try again , 'n' to return to Home Page.\n";
-                while (cin >> response) {
-                    cin.ignore(numeric_limits<streamsize >::max(),'\n');
-                    if (response == 'n') this->homeView();
-                    else if (response == 'y') {
+                while (1) {
+                    getline(cin,response);
+                    if (response == "n") {
+                        this->homeView();
+                        exit=true;
+                        return;
+                    }
+                    else if (response == "y") {
                         this->loginAdmin();
                         return;
                     } else cout << "Invalid response.\nEnter Again.\n";

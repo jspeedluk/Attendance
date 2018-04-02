@@ -6,7 +6,7 @@
 
 Admin::Admin(const string &basic_string, const string &input_password, Database_handler &db,
              const Interface_handler &handler) :
-        Faculty(basic_string, input_password, db), handler(handler) {}
+        Faculty(basic_string, input_password, db ), handler(handler) {}
 
 
 void Admin::adminDashboard() {
@@ -21,41 +21,50 @@ void Admin::adminDashboard() {
     cout << "Enter 7 to remove a registered student from the course :\n";
     cout << "Enter 8 to modify Attendance :\n";
     cout << "Enter 9 to add Attendance into the database :\n";
-    unsigned int input;
-    cin >> input;
+    cout << "Enter 0 to exit and return to home :\n";
+    char input;
+    string isBadInput;
+    getline(cin,isBadInput);
+    if(isBadInput.length()>1) input ='0';  //goes to defaults case for bad input
+    else input=isBadInput.at(0);
     system("clear");
     switch (input) {
-        case 1:
+        case '1':
             this->addFaculty();
             break;
-        case 2:
+        case '2':
             this->setFaculty();
             break;
-        case 3:
+        case '3':
             this->deleteFaculty();
             break;
-        case 4:
-//            this->viewAttendance();
+        case '4':
+            this->viewAttendance();
             break;
-        case 5:
-//            this->addStudent();
+        case '5':
+            this->addStudent();
             break;
-        case 6:
-//            this->modifyStudent();
+        case '6':
+            this->modifyStudent();
             break;
-        case 7:
-//            this->deleteStudent();
+        case '7':
+            this->deleteStudent();
             break;
-        case 8:
-//            this->modifyAttendance();
+        case '8':
+            this->modifyAttendance();
             break;
-        case 9:
-            //    this->addAttendance();
+        case '9':
+            this->addAttendance();
+            break;
+        case '0':
+            this->exit=true;
             break;
         default:
             cout << "Invalid choice\n";
-            this->adminDashboard();
-    }
+        }
+           if(!this->exit) this->adminDashboard();
+            cout<<"Logging you out...\n";
+            handler.homeView();           
 }
 
 void Admin::addFaculty() {
@@ -66,22 +75,22 @@ void Admin::addFaculty() {
 void Admin::deleteFaculty() {
     string linkedPassword, name;
     cout << "You chose to remove a Faculty for the coarse.\nEnter Faculty Name.\n";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, name);
     linkedPassword = db->getFaculty(name);
     if (!db->passwordStrength(linkedPassword)) {
         cout << "No such Faculty Assigned for the coarse.\n Redirecting to Dashboard... \n";
         return;
     } else
+    { 
         db->deleteFaculty(name);
-    cout << name << " has been successfully Removed from the course !\n\n";
+        cout << name << " has been successfully Removed from the course !\n\n";
+    }
 
 }
 
-void Admin::setFaculty() {  //need bug fix
+void Admin::setFaculty() {
     string linkedPassword, name;
     cout << "You chose to modify a Faculty for the coarse.\nEnter Faculty Name.\n";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, name);
     linkedPassword = db->getFaculty(name);
     if (!db->passwordStrength(linkedPassword)) {
@@ -90,29 +99,31 @@ void Admin::setFaculty() {  //need bug fix
     }
         cout << "Enter 1 : to change Name for Dr. " << name << endl;
     cout << "Enter 2 : to change password for Dr. " << name << endl;
-    int inp = 0;
-    while (inp != 1 && inp != 2) {
-
-        cin >> inp;
-        if (inp == 1) {
+   char input='0';
+    while (input!='1'&&input!='2') {
+    string isBadInput;
+    getline(cin,isBadInput);
+    if(isBadInput.length()>1) input ='0';  //goes to default case for bad input (enter again)
+    else input=isBadInput.at(0);
+        if (input == '1') {
             string newName;
             cout << "Enter new name for Dr. " << name << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, newName);
             db->deleteFaculty(name);
             Faculty faculty(newName, linkedPassword, *db);
             db->addFaculty(faculty);
             cout<<"New name has been updated .\n";
-        } else if (inp == 2) {
+        } else if (input == '2') {
             string newPass = "";
             cout << "Enter new Password for Dr. " << name << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            getline(cin,newPass);
-            while (!db->passwordStrength(newPass))
+            
+            while (1)
             {
-                PRINT_WEAK_PASSWORD
                 getline(cin,newPass);
-
+                if(!db->passwordStrength(newPass))
+                PRINT_WEAK_PASSWORD
+                else
+                    break;
             }
             db->deleteFaculty(name);
             Faculty faculty(name, newPass, *db);
