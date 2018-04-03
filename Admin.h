@@ -11,10 +11,10 @@
 
 class Admin : public Faculty {
 private:
-    Interface_handler handler;
+    Interface_handler *handler;
 public:
 	/*Constructor initialises handler and Passes values to Faculty */
-    Admin(const string &basic_string, const string &,Database_handler &db, const Interface_handler &handler);
+    Admin(const string &basic_string, const string &,Database_handler &db, Interface_handler &handler);
     /*Adds Faculty just like from Interface ( HOMEVIEW ) */
     void addFaculty();
     /*Changes the faculty's name or password as required by the user */

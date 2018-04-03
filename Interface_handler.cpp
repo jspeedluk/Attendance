@@ -10,7 +10,7 @@ int Interface_handler::adminPasswordCount = 0;
 
 
 void Interface_handler::homeView() {
-
+    if(exit) return;
     cout << "Enter 1 for Admin Login :\n";
     cout << "Enter 2 for Faculty Login :\n";
     cout << "Enter 3 for registration of new Faculty:\n";
@@ -42,7 +42,7 @@ void Interface_handler::homeView() {
             break;
         case '5':
             user = new User();
-            // user->viewDefaulters();
+            user->viewDefaulters();
             delete user;
             break;
         case '9':
@@ -96,27 +96,44 @@ void Interface_handler::_register() {
     getline(cin,input_password);
     while (!db->passwordStrength(input_password)) {
         PRINT_WEAK_PASSWORD
-        cin >> input_password;
+        getline(cin,input_password);
     }
     system("clear");
     cout << "Re enter your password to continue.\n";
-    getline(cin,input_password_verify);
     int passwordTries=0;
-    while (input_password != input_password_verify) {
-        system("clear");
-        if(passwordTries==3)
+//        getline(cin,input_password_verify);
+//        int passwordTries=0;
+//        while (input_password != input_password_verify) {
+//            system("clear");
+//            if(passwordTries==3)
+//            {
+//                cout<<"Too many Attempts.\nRedirecting to Home...\n\n";
+//                this->homeView();
+//                exit=true;
+//            }
+//            passwordTries++;
+//            cout << "Password does not match.\n Enter again.\n";
+//            getline(cin,input_password_verify);
+//        }
+        getline(cin,input_password_verify);
+    while (input_password!=input_password_verify) {
+            passwordTries++;
+            if(passwordTries<3) cout << "Password does not match.\nEnter again.\n";
+
+        if(passwordTries>=3)
         {
             cout<<"Too many Attempts.\nRedirecting to Home...\n\n";
             this->homeView();
             exit=true;
+            break;
         }
-        passwordTries++;
-        cout << "Password does not match.\n Enter again.\n";
         getline(cin,input_password_verify);
     }
-    Faculty faculty(name,input_password,*db);
-    db->addFaculty(faculty);
-    cout << name << " has been successfully registered as the Faculty for the course !\n";
+        if(!exit) {
+            Faculty faculty(name, input_password, *db);
+            db->addFaculty(faculty);
+            cout << name << " has been successfully registered as the Faculty for the course !\n";
+        }
 }
 }
 

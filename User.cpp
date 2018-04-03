@@ -117,13 +117,13 @@ void User::loadPresentCountList()
 void User::storePresentCountList()
 {
     map<string,int>::iterator presentCountIterator = presentCountList.begin();
-    fstream spresents( "presentCount.txt" );
+    fstream presentCount( "presentCount.txt" );
     while(presentCountIterator != presentCountList.end() )
     {
-        spresents<< presentCountIterator->first <<'\t'<< presentCountIterator->second <<endl;
+        presentCount<< presentCountIterator->first <<'\t'<< presentCountIterator->second <<endl;
         presentCountIterator++;
     }
-    spresents.close();
+    presentCount.close();
     return ;
 }
 

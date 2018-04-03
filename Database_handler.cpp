@@ -41,12 +41,12 @@ string Database_handler::getFaculty(const string nameOfFaculty) {
     return facultyMap[nameOfFaculty];
 }
 
-void Database_handler::addFaculty(Faculty facultyObj) {
+void Database_handler::addFaculty(Faculty facultyObj) {   //NEEDS FIX
     ofstream file("faculty_details.txt",ios::out);
     facultyMap.erase(facultyObj.getName());
     auto  it=facultyMap.begin();
     while(++it!=facultyMap.end()) file<<it->first<<'\n'<<it->second<<'\n';
-    facultyMap[facultyObj.getName()]=facultyMap[facultyObj.getPassword()]; //trimming '\n' from the ends.
+    facultyMap[facultyObj.getName()]=facultyObj.getPassword();
     file<<facultyObj.getName()<<endl<<facultyObj.getPassword()<<endl;
     file.close();
 }
@@ -77,18 +77,18 @@ string Database_handler::getStudent(string rollNum) {
 
 void Database_handler::addStudent(Student student) {
     //adding student to map studentsMap 
-    studentsMap[student.getRollNum() ] = student.getName();
+    this->studentsMap[student.getRollNum() ] = student.getName();
     //writing whole studentsMap Map to the file StudentsList.txt
-    std::map<string,string>::iterator it = studentsMap.begin();
+    std::map<string,string>::iterator it = this->studentsMap.begin();
     fstream writeStudents( "StudentsList.txt" , ios::out);
-    while(it!=studentsMap.end())
+    while(it!=this->studentsMap.end())
     {
         writeStudents << it->first <<'\n'<< it->second << endl;
         it++;
     }
     writeStudents.close();
     //to add student to presents count list with Zero attendance
-        User tempUser;
+    User tempUser;
     tempUser.addNewlyRegisteredStudent( student.getRollNum() );
 }
 

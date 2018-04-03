@@ -22,7 +22,6 @@ const void Faculty::facultyDashboard() {
     cout << "Enter 9 to log-out and return to Home:\n";
     string isBadInput;
     char input;
-    User *user; //why??
     cin >> isBadInput;
     if(isBadInput.length()>1) input ='0';  //goes to defaults case for bad input
     else input=isBadInput.at(0);
@@ -161,7 +160,7 @@ void Faculty::modifyStudent() {
 bool Faculty::setPassword() {
     string pass_original,pass_new;
     cout<<"Enter Existing Password :\n";
-    cin>>pass_original;
+getline(cin,pass_original) ;
     if(pass_original!=password)
     {
         system("clear");
@@ -169,9 +168,15 @@ bool Faculty::setPassword() {
         return true;
     }
     cout<<"Enter new Password :\n";
-    cin>>pass_new;
+    getline(cin,pass_new);
+    while (!db->passwordStrength(pass_new))
+    {
+        PRINT_WEAK_PASSWORD
+        getline(cin,pass_new);
+    }
     this->password=pass_new;
     db->addFaculty(*this);
+    cout<<"Password changed successfully.\n";
     return false;
 }
 
@@ -226,7 +231,7 @@ void Faculty::addAttendance()
     {
         cout<<"Enter the number of Students absent on the date: ";
     todayAbsentsCount=takeint();
-    cout<<"Enter the roll Number of Students who were Absent today.\n";
+    cout<<"Enter the roll Number of Students absent on the date.\n";
     for (int i = 0; i < todayAbsentsCount; ++i)
     {
         cout<<i+1<<" : ";

@@ -12,7 +12,6 @@
 #include <iostream>
 #include <cstdio>
 #define INT_MAX 1000
-#define  PATH_STUDENT "/Users/gambhir/Desktop/Attendance/cmake-build-debug/students/"
 #define PRINT_WEAK_PASSWORD cout << "Yout password must be 6 to 13 digit , contain a number and an Upper Case alphabet !\nReenter your password.\n";
 #include "Faculty.h"
 

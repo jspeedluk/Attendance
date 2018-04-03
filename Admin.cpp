@@ -5,12 +5,13 @@
 #include "Admin.h"
 
 Admin::Admin(const string &basic_string, const string &input_password, Database_handler &db,
-             const Interface_handler &handler) :
-        Faculty(basic_string, input_password, db ), handler(handler) {}
+              Interface_handler &handler) :
+        Faculty(basic_string, input_password, db ), handler(&handler) {}
 
 
 void Admin::adminDashboard() {
     system("clear");
+
     cout << "\nWelcome Dr. Chiranjoy Chattopadhyay.\n";
     cout << "Enter 1 to Add a Faculty for the course :\n";
     cout << "Enter 2 to modify a Faculty details :\n";
@@ -62,13 +63,14 @@ void Admin::adminDashboard() {
         default:
             cout << "Invalid choice\n";
         }
+    if(handler->exit==1) this->exit=1;
            if(!this->exit) this->adminDashboard();
             cout<<"Logging you out...\n";
-            handler.homeView();           
+    handler->homeView();
 }
 
 void Admin::addFaculty() {
-    handler._register();
+    handler->_register();
 
 }
 
