@@ -35,7 +35,10 @@ Database_handler::Database_handler() {
     }
     stfile.close();
 //    auto  it=facultyMap.begin();
-//    while(++it!=facultyMap.end()) cout<<it->first<<endl<<it->second<<endl; //for testing
+//    while(it!=facultyMap.end()) cout<<it->first<<endl<<it++->second<<endl; //for testing
+//    auto  it2=studentsMap.begin();
+//    while(it2!=studentsMap.end()) cout<<it2->first<<endl<<it2++->second<<endl; //for testing
+
 }
 string Database_handler::getFaculty(const string nameOfFaculty) {
     return facultyMap[nameOfFaculty];

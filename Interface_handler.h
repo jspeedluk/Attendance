@@ -14,7 +14,7 @@ class Interface_handler {
 
     Database_handler *db;
 public:
-    bool exit;
+    bool exitBool;
 	/*constructer initialises default private attributes */
     Interface_handler();
     /* takes name and password from user and verifies both from 

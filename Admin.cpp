@@ -63,7 +63,7 @@ void Admin::adminDashboard() {
         default:
             cout << "Invalid choice\n";
         }
-    if(handler->exit==1) this->exit=1;
+    if(handler->exitBool==1) this->exit=1;
            if(!this->exit) this->adminDashboard();
             cout<<"Logging you out...\n";
     handler->homeView();

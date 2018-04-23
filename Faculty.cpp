@@ -86,7 +86,7 @@ void Faculty::addStudent() {
         Student student(nameStudent,rollnumber);
         db->addStudent(student);
         cout<<nameStudent<<" is successfully Registered.\n";
-    } 
+    }
     else
     {
         cout<<"Student already Registered as :\n";
@@ -216,18 +216,19 @@ void Faculty::addAttendance()
     {
         fileAddress = "./date/"+dateString + "(1).txt";
         if( find( lectureDates.begin() , lectureDates.end() , dateString+"(1)" ) == lectureDates.end() )
-            lectureDates.push_back(dateString+"(1)");
-        else
+        { lectureDates.push_back(dateString+"(1)");
+        input="y";}
+        else{
             cout<<"Records for 2 Lectures for  "<<dateString<<" have already been updated.\n2nd Lecture data will be overwritten !\n";
         cout<<"Enter 'q' to abort and return dashboard , 'c' to continue : ";
         getline(cin,input);
         while(input!="q"&&input!="c"&&input!="Q"&&input!="C") {
             cout<<"Invalid Input.\nEnter Again: ";
-            getline(cin,input);
+            getline(cin,input);}
         }
         isExist.close();
     }
-    if(input=="c"||input=="C")
+    if(input=="c"||input=="C"||input=="y")
     {
         cout<<"Enter the number of Students absent on the date: ";
     todayAbsentsCount=takeint();
@@ -312,12 +313,12 @@ void Faculty::modifyAttendance() {
     {
         if(tempStatus_input=="1"||tempStatus_input=="P"||tempStatus_input=="p")
         {
-            tempStatus=true;
+            newAttendanceStatus=true;
             break;
         } else
             if(tempStatus_input=="0"||tempStatus_input=="a"||tempStatus_input=="A")
             {
-                tempStatus=false;
+                newAttendanceStatus=false;
                 break;
             } else
             {
@@ -337,20 +338,28 @@ void Faculty::modifyAttendance() {
         dateRollnumberStatus[tempFileRollNumber]=tempStatus;
     }
     mAf.close();
+
+    cout<<"Old Attendance record for : "<<dateString<<endl;
+    for(auto it=dateRollnumberStatus.begin();it!=dateRollnumberStatus.end();it++)
+    {
+        cout<<it->first<<' '<<it->second<<endl;
+    }
+    cout<<endl;
     //check if student exist
-    bool isStudentPresent = false;
+    bool isSudentExist = false;
     map< string,bool >::iterator drsItertor =  dateRollnumberStatus.begin();
     while(drsItertor != dateRollnumberStatus.end())
     {
-        if( drsItertor->first == tempRollNumber )
+        if( drsItertor->first == tempRollNumber ) // map key equals to input rollnumber
         {
-            isStudentPresent=true;
+            isSudentExist=true;
             {
                 //means student exist in map
                 bool oldAttendanceStatus = dateRollnumberStatus[tempRollNumber];
                 if( oldAttendanceStatus==newAttendanceStatus )
                 {
-                    cout<<"Same Attendance is alreday in database\n";
+                    cout<<"Same Attendance alreaday in database\n";
+                    return;
                 }
                 else
                 {
@@ -367,6 +376,8 @@ void Faculty::modifyAttendance() {
                     }
                     //store the newly changed present count list to file
                     storePresentCountList();
+                    cout<<"Modification of student "<< tempRollNumber <<" is done to ";
+                    cout<< newAttendanceStatus <<" on date "<< dateString<<endl;
                 }
             }
             break;
@@ -376,10 +387,13 @@ void Faculty::modifyAttendance() {
     //check if student exist then do changes else return to faculty dashboard
 
 
-    if(! isStudentPresent )
+    if(! isSudentExist )
     {
         //student does not exist in map
+        if(db->getStudent(tempRollNumber)=="not present")
         cout<<"Student Roll Number is Wrong\n";
+        else
+            cout<<tempRollNumber<<' '<<db->getStudent(tempRollNumber)<<" : was registered after this Date.\n"<<"No Modifications done in Database.";
         return ; //faculty dashboard
     }
     //overwriting map to file
@@ -391,8 +405,6 @@ void Faculty::modifyAttendance() {
         drsItertor++;
     }
     wAf.close();
-    cout<<"Modification of student "<< tempRollNumber <<" is done to ";
-    cout<< newAttendanceStatus <<" on date "<< dateString<<endl;
     return ;//to faculty dashboard
 }
 
