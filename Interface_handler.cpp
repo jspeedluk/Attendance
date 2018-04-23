@@ -4,13 +4,14 @@
 
 #include "Interface_handler.h"
 #include "Admin.h"
-Interface_handler::Interface_handler() {db=new Database_handler; exit=0; }
+#include <stdlib.h>
+Interface_handler::Interface_handler() {db=new Database_handler; exitBool=0; }
 int Interface_handler::adminPasswordCount = 0;
 
 
 
 void Interface_handler::homeView() {
-    if(exit) return;
+    if(exitBool) return;
     cout << "Enter 1 for Admin Login :\n";
     cout << "Enter 2 for Faculty Login :\n";
     cout << "Enter 3 for registration of new Faculty:\n";
@@ -47,13 +48,14 @@ void Interface_handler::homeView() {
             break;
         case '9':
             cout << "Exiting.......................\n";
-            exit = true;
+            exitBool = true;
             break;
         default:
             cout << "Invalid choice\n";
     }
-    if (!exit)
-        this->homeView();
+    if (exitBool)
+        ::exit(0);
+    this->homeView();
 
 
 }
@@ -72,7 +74,7 @@ void Interface_handler::loginFaculty() {
         else {
             cout << "Invalid Password.\n";
             this->homeView();
-            exit=true;
+            exitBool=true;
         }
     }
 
@@ -86,7 +88,7 @@ void Interface_handler::_register() {
     {
         cout<<"Invalid Admin Password.\nRedirecting to home...\n";
         this->homeView();
-        exit=true;
+        exitBool=true;
     }else
     {
     string input_password, name, input_password_verify;
@@ -109,7 +111,7 @@ void Interface_handler::_register() {
 //            {
 //                cout<<"Too many Attempts.\nRedirecting to Home...\n\n";
 //                this->homeView();
-//                exit=true;
+//                exitBool=true;
 //            }
 //            passwordTries++;
 //            cout << "Password does not match.\n Enter again.\n";
@@ -124,12 +126,12 @@ void Interface_handler::_register() {
         {
             cout<<"Too many Attempts.\nRedirecting to Home...\n\n";
             this->homeView();
-            exit=true;
+            exitBool=true;
             break;
         }
         getline(cin,input_password_verify);
     }
-        if(!exit) {
+        if(!exitBool) {
             Faculty faculty(name, input_password, *db);
             db->addFaculty(faculty);
             cout << name << " has been successfully registered as the Faculty for the course !\n";
@@ -164,7 +166,7 @@ void Interface_handler::loginAdmin() {
                     getline(cin,response);
                     if (response == "n") {
                         this->homeView();
-                        exit=true;
+                        exitBool=true;
                         return;
                     }
                     else if (response == "y") {
