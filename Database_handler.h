@@ -18,11 +18,15 @@
 using namespace std;
 
 class Faculty;
+
 class Database_handler {
+
     //map storing faculty names and their passwords
     map<string, string> facultyMap;
+
     //vector storing roll number of students
     map<string,string> studentsMap;
+
 public:
     Database_handler();
 
@@ -48,12 +52,17 @@ public:
     /*takes name of faculty as argument and 
     returns password of faculty from the map*/
     string getFaculty(string);
+
     /*takes the name of the faculty as argument and 
     deletes it from facultyMap and updates faculty_details.txt */
     void deleteFaculty(const string);
+
     /*takes password(string) as an argument and returns true if
     it has min 1 UpperCase , number and 6<=string.length()<=13 */
     bool passwordStrength(string);
+
+    void printStudentList();
+    void printFacultyList();
 
 };
 

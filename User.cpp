@@ -35,16 +35,18 @@ User::User()
 {
     name = "Default";
     string temDate;
-    fstream ldates( "lectureDatesfile.txt" );
+    ifstream ldates( "lectureDatesfile.txt" );
+   if(ldates.peek() != std::ifstream::traits_type::eof())
     while(!ldates.eof())
     {
         ldates>>temDate;
         lectureDates.push_back(temDate);
     }
     ldates.close();
-        string tempRollNumber;
+    string tempRollNumber;
     int tempPresents;
-    fstream lpresents( "presentCount.txt" );
+    ifstream lpresents( "presentCount.txt" );
+    if(lpresents.peek() != std::ifstream::traits_type::eof())
     while(!lpresents.eof())
     {
         lpresents>>tempRollNumber>>tempPresents;
@@ -61,23 +63,30 @@ string User::getName() {
 
 void User::viewDefaulters() {
     int numberOfLectures = lectureDates.size();
-    cout<<"List of students who has their attendance below 85%\n";
+    cout<<"----- List of students who have their attendance below 85% -----\n";
     map<string,int>::iterator presentCountIterator = presentCountList.begin();
+    int index=1;
     while(presentCountIterator != presentCountList.end() )
     {
         double percentAttendance = ( presentCountIterator->second / ( numberOfLectures + 0.0 ) )*100;
         if( percentAttendance < 85 )
         {
-            cout<< presentCountIterator->first << "    " << percentAttendance <<endl;
+            cout<<index++<<" :"<< presentCountIterator->first << "\n----> " << percentAttendance <<" %\n";
         }
         presentCountIterator++;
     }
+    cout<<"\n-------------Total Defaulter Count = "<<--index<<"-------------\n\n";
 }
 
 void User::viewAttendance() { 
     
-    cout<<"Attendace of Each class is shown as Date - students who were Absent on that day\n";
-    vector<string>::iterator dateIterator = lectureDates.begin();
+
+    if(lectureDates.size()==0)
+        cout<<"\n--------------No Lectures Taken-------------- \n";
+    else
+    {
+        cout<<"Attendace of Each class is shown as Date - students who were Absent on that day\n";
+        vector<string>::iterator dateIterator = lectureDates.begin();
     while( dateIterator !=lectureDates.end() )
     {
         string dateOfLecture = *dateIterator, tempStudentRollNumber;
@@ -96,7 +105,7 @@ void User::viewAttendance() {
         dateFile.close();
         cout<<"\n\n";
         dateIterator++;
-    }
+    }}
 }
 void User::loadPresentCountList()
 {

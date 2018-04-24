@@ -17,6 +17,8 @@ void Interface_handler::homeView() {
     cout << "Enter 3 for registration of new Faculty:\n";
     cout << "Enter 4 to view All Attendance :\n";
     cout << "Enter 5 to view All Defaulters :\n";
+    cout << "Enter 6 to view list of registered Students :\n";
+    cout<< "Enter 7 to view list of registered Faculties :\n";
     cout << "Enter 9 to Exit :\n";
     string isBadInput;
     char input;
@@ -37,6 +39,7 @@ void Interface_handler::homeView() {
             this->_register();
             break;
         case '4':
+            cout<<"Viewing All Attendance.......\n\n";
             user = new User();
             user->viewAttendance();
             delete user;
@@ -45,6 +48,12 @@ void Interface_handler::homeView() {
             user = new User();
             user->viewDefaulters();
             delete user;
+            break;
+        case '6':
+            db->printStudentList();
+            break;
+        case '7':
+            db->printFacultyList();
             break;
         case '9':
             cout << "Exiting.......................\n";

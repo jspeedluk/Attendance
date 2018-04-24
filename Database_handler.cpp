@@ -30,6 +30,7 @@ Database_handler::Database_handler() {
     while(!stfile.eof())
     {
         getline( stfile, tempStudentRollNumber );
+        if(stfile.eof())break;
         getline( stfile, tempStudentName );
         studentsMap[tempStudentRollNumber]=tempStudentName;
     }
@@ -108,4 +109,31 @@ void Database_handler::deleteStudent(const string rollNum) {
         it1++;
     }
     writeStudents1.close();
+}
+
+void Database_handler::printStudentList() {
+    auto it=studentsMap.begin();
+    cout<<"----------------List of Registered Students----------------\n\n";
+    int count=0;
+    while(it!=studentsMap.end())
+    {
+        cout<<++count<<" :"<<it->first<<" ---- "<<it->second<<endl;
+        it++;
+    }
+    cout<<"\n Total Students registered in the course = "<<count<<endl;
+    cout<<"\n-----------------------------------------------------------------\n\n";
+
+}
+
+void Database_handler::printFacultyList() {
+    auto it=facultyMap.begin();
+    cout<<"---------------List of Faculties for this course---------------\n\n";
+    int count=0;
+    while(it!=facultyMap.end())
+    {
+        cout<<++count<<" : Dr. "<<it->first<<endl;
+        it++;
+    }
+    cout<<"\n Total count = "<<count<<endl;
+    cout<<"\n-----------------------------------------------------------------\n\n";
 }

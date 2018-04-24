@@ -1,5 +1,3 @@
-
-Akhil Singh
 B16CS001
 Abhinav Suthar
 B16CS002
@@ -14,5 +12,3 @@ B16CS011
 Kuldeep Singh
 B16CS030
 Saksham Gupta
-B16EE005
-Akhil Singh
