@@ -232,18 +232,18 @@ void Faculty::addAttendance()
     {
         cout<<"Enter the number of Students absent on the date: ";
     todayAbsentsCount=takeint();
-    cout<<"Enter the roll Number of Students absent on the date.\n";
-    for (int i = 0; i < todayAbsentsCount; ++i)
-    {
-        cout<<i+1<<" : ";
-        getline(cin,tempRollNumber);
-        if(presentCountList.find(tempRollNumber)==presentCountList.end())
-        {
-            cout<<"Invalid Roll number.\nEnter Again:  ";
-            i--;
-        } else
-        todayAbsents.push_back(tempRollNumber);
-    }
+    if(todayAbsentsCount>0) {
+        cout << "Enter the roll Number of Students absent on the date.\n";
+        for (int i = 0; i < todayAbsentsCount; ++i) {
+            cout << i + 1 << " : ";
+            getline(cin, tempRollNumber);
+            if (presentCountList.find(tempRollNumber) == presentCountList.end()) {
+                cout << "Invalid Roll number.\nEnter Again:  ";
+                i--;
+            } else
+                todayAbsents.push_back(tempRollNumber);
+        }
+
     //stores attendance in map presentCountList, vector todayAbsents
     //writes to file rollNumber true(present)/false(absent), rollNumber presentCount
     map<string,int>::iterator strollnum = presentCountList.begin();
@@ -268,8 +268,22 @@ void Faculty::addAttendance()
             stoday<< false <<"\n";
         }
         strollnum++;
+    }} else
+    {
+        map<string,int>::iterator strollnum = presentCountList.begin();
+        fstream stoday(fileAddress , ios::out);
+        while(strollnum != presentCountList.end() )
+        {
+            stoday<< strollnum->first <<'\t';
+            cout<<"stoday is being updated ..\n";
+            strollnum->second++;
+            stoday<< true <<"\n";
+            strollnum++;
+
+        }
+        stoday.close();
     }
-    stoday.close();
+
     storeLectureDates();
     storePresentCountList();
 } else
